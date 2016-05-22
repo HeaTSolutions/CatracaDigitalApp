@@ -1,31 +1,34 @@
 <ion-view title="Controle de Ponto" id="page2" class=" ">
-    <ion-content padding="true" class="has-header">
-        <h3 id="register-heading1" style="color:#000000;" class=" ">Marcações para hoje</h3>
-        <ion-list id="register-list3" class=" ">
-            <ion-item class="item-icon-right  " id="register-list-item8">Total trabalhado
-                <span class="item-note">06:25:12</span>
-                <i class="icon ion-android-alarm-clock icon-accessory"></i>
-            </ion-item>
-        </ion-list>
-        <div class="item item-body " id="register-list-item-container1">
-            <p id="register-markdown1" style="margin-top:0px;color:#000000;" class=" ">Dia
-                <strong>15/05/2016</strong>
-            </p>
-            <ion-list id="register-list2" class=" ">
-                <ion-item class="item-icon-right  " id="register-list-item5">Entrada
-                    <span class="item-note">08:19:22</span>
-                    <i class="icon ion-clock icon-accessory"></i>
-                </ion-item>
-                <ion-item class="item-icon-right  " id="register-list-item6">Saída
-                    <span class="item-note">11:47:52</span>
-                    <i class="icon ion-clock icon-accessory"></i>
-                </ion-item>
-                <ion-item class="item-icon-right  " id="register-list-item7">Entrada
-                    <span class="item-note">12:28:33</span>
-                    <i class="icon ion-clock icon-accessory"></i>
-                </ion-item>
-            </ion-list>
-        </div>
-        <button id="register-button1" class=" button button-positive  button-block icon-left ion-android-add-circle ">Marcar ponto</button>
-    </ion-content>
+  <ion-content padding="true" class="has-header">
+    <h3 id="register-heading1" style="color:#000000;" class=" ">Marcações para hoje</h3>
+    <ion-list id="register-list3" class=" ">
+      <ion-item class="item-icon-right  " id="register-list-item8">Total trabalhado
+        <span class="item-note">{{ totalWorkedToday }}</span>
+        <i class="icon ion-android-alarm-clock icon-accessory"></i>
+      </ion-item>
+    </ion-list>
+    <div class="item item-body " id="register-list-item-container1" ng-show="registers.length">
+      <p id="register-markdown1" style="margin-top:0px;color:#000000;" class=" ">Dia
+        <strong>{{ currentDate | date:'dd/MM/yyyy'}}</strong>
+      </p>
+      <ion-list id="register-list2" show-delete="shouldShowDelete">
+        <ion-item ng-repeat="register in registers" class="item-icon-right  " id="register-list-item5">
+          {{ register.label }}
+          <span class="item-note">{{ register.time | date:"HH:mm:ss":"+0000" }}</span>
+          <i class="icon ion-clock icon-accessory"></i>
+          <ion-delete-button class="ion-minus-circled" ng-click="removeRegister(register, $index)">
+          </ion-delete-button>
+        </ion-item>
+      </ion-list>
+    </div>
+    <ion-toggle ng-model="shouldShowDelete" ng-show="registers.length">
+      Remover registros
+    </ion-toggle>
+    <h4 ng-hide="registers.length">
+      Não há registros hoje.
+    </h4>
+    <button ng-click="showRegisterConfirm()" id="register-button2"
+            class=" button button-positive  button-block icon-left ion-android-add-circle ">Marcar ponto
+    </button>
+  </ion-content>
 </ion-view>

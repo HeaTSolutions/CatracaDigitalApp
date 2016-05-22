@@ -2,7 +2,7 @@
 <widget id="br.com.catracadigital" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>CatracaDigital</name>
   <description>
-        Controle fácil de ponto em empresas com mais de 10 funcionários.
+        Controle fácil de ponto em empresas.
     </description>
   <author email="hrqnogueira@gmail.com" href="https://catracadigital.com.br/">
       Henrique Nogueira

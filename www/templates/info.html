@@ -2,19 +2,19 @@
     <ion-content padding="true" class="has-header">
         <ion-list id="info-list1" class=" ">
             <ion-item class="item-icon-right  " id="info-list-item1">Nome
-                <span class="item-note">Henrique Nogueira</span>
+                <span class="item-note">{{ employee.full_name }}</span>
                 <i class="icon ion-android-person icon-accessory"></i>
             </ion-item>
             <ion-item class="item-icon-right  " id="info-list-item2">Empresa
-                <span class="item-note">Moinho Canuelas</span>
+                <span class="item-note">{{ company.name }}</span>
                 <i class="icon ion-android-home icon-accessory"></i>
             </ion-item>
             <ion-item class="item-icon-right  " id="info-list-item3">PIS
-                <span class="item-note">02222/256329-985</span>
+                <span class="item-note">{{ employee.pis }}</span>
                 <i class="icon ion-document icon-accessory"></i>
             </ion-item>
             <ion-item class="item-icon-right  " id="info-list-item4">Data admissão
-                <span class="item-note">23/05/1989</span>
+                <span class="item-note">{{ employee.admission_date | date:'dd/MM/yyyy' }}</span>
                 <i class="icon ion-calendar icon-accessory"></i>
             </ion-item>
         </ion-list>
