@@ -1,4 +1,12 @@
 {
   "name": "CatracaDigital",
-  "app_id": "ec7bda97"
+  "app_id": "ec7bda97",
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ]
 }

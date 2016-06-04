@@ -3,8 +3,12 @@ angular.module('app.controllers', ['ngCordova'])
   .controller('registerCtrl', function (serverEndpoint, $scope, $state, $window, $ionicPlatform, $ionicLoading,
                                         $ionicPopup, $cordovaDevice, $http, $timeout, Register, LocationService) {
     $scope.currentDate = new Date();
-    $scope.shouldShowDelete = false;
+    $scope.shouldShowDelete = {};
+    $scope.shouldShowDelete.bool = false;
     $scope.totalWorkedToday = "Carregando...";
+
+    $scope.registers = [];
+    $scope.direction = ['Entrada', 'Saída'][$scope.registers.length % 2];
 
     $ionicPlatform.ready(function () {
       loadRegisters = function () {
@@ -16,17 +20,20 @@ angular.module('app.controllers', ['ngCordova'])
             $scope.registers.push(register);
           });
         });
+        $scope.shouldShowDelete.bool = false;
       }
 
       addRegisterCallback = function (location) {
         if (location != null) {
-          Register.save({uuid: $cordovaDevice.getDevice().uuid}, location, function() {}, function() {
+          Register.save({uuid: $cordovaDevice.getDevice().uuid}, location, function() {
+            loadRegisters();
+          }, function() {
             $ionicPopup.alert({
              title: 'Ocorreu um erro',
              template: 'Não foi possível contactar o CatracaDigital. Assegure-se ' +
              'de que seu celular está com WiFi habilitado e conectado ou que' +
              'os serviços de dados do aparelho estejam ligados e tente novamente.'
-           });
+            });
           });
         }
         else {
@@ -36,7 +43,6 @@ angular.module('app.controllers', ['ngCordova'])
            'os serviços de localização do aparelho e tentar novamente.'
          });
         }
-        loadRegisters();
         $ionicLoading.hide();
       }
 
@@ -67,8 +73,10 @@ angular.module('app.controllers', ['ngCordova'])
               method: 'DELETE',
               url: serverEndpoint + "/delete_register/" + register.pk
             }).then(function successCallback(response) {
+              $scope.shouldShowDelete = false;
               loadRegisters();
               $ionicLoading.hide();
+
             }, function errorCallback(response) {
               console.log("Could not remove entry.");
             });
@@ -114,11 +122,34 @@ angular.module('app.controllers', ['ngCordova'])
   })
 
   .controller('reportCtrl', function ($scope) {
-    
+
   })
 
-  .controller('historyCtrl', function ($scope) {
+  .controller('historyCtrl', function ($scope, $ionicPlatform, $cordovaDevice, $ionicPopup, $http, serverEndpoint) {
+    $ionicPlatform.ready(function () {
+      var uuid = $cordovaDevice.getDevice().uuid;
 
+      $http({
+        method: 'GET',
+        url: serverEndpoint + "/history/" + uuid
+      }).then(function(data) {
+        $scope.months = [];
+        console.log(data);
+        console.log(data.data);
+        angular.forEach(data.data.data, function(month, idx) {
+          console.log(month);
+          $scope.months.push(new Date(month));
+        });
+
+      }, function() {
+        $ionicPopup.alert({
+          title: 'Ocorreu um erro',
+          template: 'Não foi possível contactar o CatracaDigital. Assegure-se ' +
+          'de que seu celular está com WiFi habilitado e conectado ou que' +
+          'os serviços de dados do aparelho estejam ligados e tente novamente.'
+        });
+      });
+    });
   })
 
   .controller('infoCtrl', function ($scope, $ionicPlatform, $cordovaDevice, Employee) {
@@ -133,11 +164,23 @@ angular.module('app.controllers', ['ngCordova'])
     });
   })
 
-  .controller('signUpCtrl', function ($scope, $ionicPlatform, $cordovaDevice) {
+  .controller('signUpCtrl', function ($scope, $state, $ionicLoading, $ionicPlatform, $cordovaDevice, EmployeeService) {
     $ionicPlatform.ready(function () {
       var device = $cordovaDevice.getDevice();
       $scope.uuid = device.uuid.toUpperCase();
+
+      $scope.refresh = function() {
+        $ionicLoading.show({template: 'Carregando...'});
+        EmployeeService.isRegistered(device.uuid, function () {
+          $ionicLoading.hide();
+          $state.go("catracaTabController.register");
+        }, function () {
+          $ionicLoading.hide();
+          $state.go("signUp");
+        });
+      }
     });
+
   })
 
   .controller('startCtrl', function ($scope, $ionicLoading, $ionicPlatform, $state, $cordovaDevice, EmployeeService) {
@@ -153,7 +196,6 @@ angular.module('app.controllers', ['ngCordova'])
         $ionicLoading.hide();
         $state.go("signUp");
       });
-
     });
 
   })

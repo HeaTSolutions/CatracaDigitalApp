@@ -1,6 +1,12 @@
 <ion-view title="Histórico" id="page4" class=" ">
-    <ion-content padding="true" class="has-header">
-        <p id="history-markdown2" style="color:#000000;" class=" ">Será disponbilizado
-            <strong>em breve</strong>!</p>
-    </ion-content>
+  <ion-content padding="true" class="has-header">
+    <label class="item item-input item-select">
+      <div class="input-label">
+        Mês referência
+      </div>
+      <select>
+        <option ng-repeat="month in months">{{ month | date:"MM/yyyy":"+0000" }}</option>
+      </select>
+    </label>
+  </ion-content>
 </ion-view>

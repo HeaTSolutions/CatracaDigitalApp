@@ -11,7 +11,7 @@
       <p id="register-markdown1" style="margin-top:0px;color:#000000;" class=" ">Dia
         <strong>{{ currentDate | date:'dd/MM/yyyy'}}</strong>
       </p>
-      <ion-list id="register-list2" show-delete="shouldShowDelete">
+      <ion-list id="register-list2" show-delete="shouldShowDelete.bool">
         <ion-item ng-repeat="register in registers" class="item-icon-right  " id="register-list-item5">
           {{ register.label }}
           <span class="item-note">{{ register.time | date:"HH:mm:ss":"+0000" }}</span>
@@ -21,14 +21,14 @@
         </ion-item>
       </ion-list>
     </div>
-    <ion-toggle ng-model="shouldShowDelete" ng-show="registers.length">
+    <ion-toggle ng-model="shouldShowDelete.bool" ng-show="registers.length">
       Remover registros
     </ion-toggle>
     <h4 ng-hide="registers.length">
       Não há registros hoje.
     </h4>
     <button ng-click="showRegisterConfirm()" id="register-button2"
-            class=" button button-positive  button-block icon-left ion-android-add-circle ">Marcar ponto
+            class=" button button-positive  button-block icon-left ion-android-add-circle ">Marcar ponto {{ direction }}
     </button>
   </ion-content>
 </ion-view>
